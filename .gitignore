@@ -1,0 +1,16 @@
+# Logs
+/logs/
+*.log
+
+# Development mode environment values
+/.env
+/docker-compose.override.yml
+
+# Dependency directory
+app/node_modules/
+
+# Editor temporary files
+*~
+\#*#
+.#*
+/tmp/
