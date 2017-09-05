@@ -2,6 +2,8 @@ require 'bundler/setup'
 require 'rack'
 require 'net/http'
 require 'json'
+require 'prometheus/middleware/collector'
+require 'prometheus/middleware/exporter'
 require_relative 'lib/redirector'
 
 # Fetch redirect data from admin API
@@ -13,6 +15,8 @@ redirects = JSON.parse(response).map do |json|
 end
 
 use Rack::Deflater, if: ->(_, _, _, body) { body.any? && body[0].length > 512 }
+use Prometheus::Middleware::Collector, metrics_prefix: 'redirector'
+use Prometheus::Middleware::Exporter
 use Redirector, redirects: redirects
 
 # All URLs default to 404 not found

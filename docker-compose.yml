@@ -1,12 +1,47 @@
 version: '3'
 
 volumes:
+  prometheus:
+  grafana:
   pg_data:
   gems:
   node_modules:
   rails_gems:
 
 services:
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - prometheus:/prometheus
+    command:
+      - '-config.file=/etc/prometheus/prometheus.yml'
+      - '-storage.local.path=/prometheus'
+    ports:
+      - 9090:9090
+
+  postgres-exporter:
+    image: wrouesnel/postgres_exporter
+    ports:
+      - '9187:9187'
+    environment:
+      DATA_SOURCE_NAME: 'postgresql://redirector:redirector@redirector:5432/?sslmode=disable'
+    depends_on:
+      - prometheus
+      - db
+
+  grafana:
+    image: grafana/grafana
+    depends_on:
+      - prometheus
+    ports:
+      - 4000:3000
+    volumes:
+      - grafana:/var/lib/grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: 'admin'
+      GF_USERS_ALLOW_SIGN_UP: 'false'
+
   db:
     image: postgres:9-alpine
     volumes:
