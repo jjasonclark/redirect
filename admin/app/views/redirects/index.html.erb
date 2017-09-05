@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Redirects</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Regex</th>
+      <th>Result</th>
+      <th>Code</th>
+      <th>Order</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @redirects.each do |redirect| %>
+      <tr>
+        <td><%= redirect.regex %></td>
+        <td><%= redirect.result %></td>
+        <td><%= redirect.code %></td>
+        <td><%= redirect.order %></td>
+        <td><%= link_to 'Show', redirect %></td>
+        <td><%= link_to 'Edit', edit_redirect_path(redirect) %></td>
+        <td><%= link_to 'Destroy', redirect, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= button_to 'Up', up_redirect_path(redirect) %></td>
+        <td><%= button_to 'Down', down_redirect_path(redirect) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Redirect', new_redirect_path %>

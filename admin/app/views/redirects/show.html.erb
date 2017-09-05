@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Regex:</strong>
+  <%= @redirect.regex %>
+</p>
+
+<p>
+  <strong>Result:</strong>
+  <%= @redirect.result %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @redirect.code %>
+</p>
+
+<%= link_to 'Edit', edit_redirect_path(@redirect) %> |
+<%= link_to 'Back', redirects_path %>

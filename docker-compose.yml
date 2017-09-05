@@ -1,0 +1,51 @@
+version: '3'
+
+volumes:
+  pg_data:
+  gems:
+  node_modules:
+  rails_gems:
+
+services:
+  db:
+    image: postgres:9-alpine
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: redirector
+      POSTGRES_PASSWORD: redirector
+      POSTGRES_DB: redirector
+
+  admin:
+    build: admin/
+    ports:
+      - '3000:3000'
+    command: bin/rails s -b 0.0.0.0 -p 3000 -P /tmp/server.pid
+    volumes:
+      - './admin/:/admin/'
+      - 'rails_gems:/usr/local/bundle/'
+      - 'node_modules:/admin/node_modules/'
+    environment:
+      RAILS_MAX_THREADS: 1
+      RAILS_LOG_TO_STDOUT: 1
+      DATABASE_HOST: db
+      DATABASE_USERNAME: redirector
+      DATABASE_PASSWORD: redirector
+      DATABASE_NAME: redirector
+    depends_on:
+      - db
+
+  redirector:
+    build: redirector/
+    command: bin/puma -C puma.rb
+    ports:
+      - '8080:80'
+    volumes:
+      - './redirector/:/app/'
+      - 'gems:/usr/local/bundle/'
+    environment:
+      REDIRECT_SOURCE: http://admin:3000/redirects.json
+    depends_on:
+      - admin

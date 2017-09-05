@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  regex: MyString
+  result: MyString
+  counter_name: MyString
+  next: 
+
+two:
+  regex: MyString
+  result: MyString
+  counter_name: MyString
+  next: 
